@@ -57,7 +57,21 @@ export default class View {
     } 
 
     filter(filters) {
-        console.log(filters.type, filters.words);
+        const {type, words} = filters;
+        const [,...rows] = this.table.getElementsByTagName('tr');
+        for (const row of rows) {
+            const [title, description, completed] = row.children;
+            const text = title.innerText + description.innerText;
+            let shouldhide = false;
+
+            if (words){
+                shouldhide = !text.includes(words);
+            }
+            
+            console.log(row,shouldhide);
+
+        }
+        
     }
 
     createRow(todo, fila){
