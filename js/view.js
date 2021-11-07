@@ -57,7 +57,7 @@ export default class View {
     } 
 
     filter(filters) {
-        console.log(filters.word);
+        console.log(filters.type, filters.words);
     }
 
     createRow(todo, fila){
