@@ -42,7 +42,6 @@ export default class View {
         const filaNum = fila.rowIndex;
         this.createRow(todo, filaNum);
         fila.remove();
-
     }
 
     removeTodo(id) {
