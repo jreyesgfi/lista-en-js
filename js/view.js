@@ -1,4 +1,5 @@
 import AddTodo from './components/add-todo.js'
+import Modal from './components/modal.js'
 
 export default class View {
     constructor(){
@@ -7,8 +8,10 @@ export default class View {
         this.table = document.getElementById('table');
         
         this.addTodoForm = new AddTodo();
-
         this.addTodoForm.onClick((title, description) => this.addTodo(title,description))
+
+        this.modal = new Modal();
+        this.modal.onClick((id, values)=> this.editTodo(id,values));
     }
 
     setModel(model) {
@@ -32,14 +35,29 @@ export default class View {
         const todo = this.model.addTodo(title,description)
         this.createRow(todo);
     }
+    
+    editTodo(id,values){
+        const todo = this.model.editTodo(id,values);
+        const fila = document.getElementById(id);
+        const filaNum = fila.rowIndex;
+        this.createRow(todo, filaNum);
+        fila.remove();
+
+    }
 
     removeTodo(id) {
         this.model.removeTodo(id);
         document.getElementById(id).remove();
     } 
 
-    createRow(todo){
-        const row = table.insertRow();
+    createRow(todo, fila){
+        var row = null;
+        if (typeof(fila) === 'number'){
+            row = table.insertRow(fila);
+        }
+        else{
+            row = table.insertRow();
+        }
         row.setAttribute('id', todo.id);
 
         row.innerHTML = `
@@ -49,8 +67,7 @@ export default class View {
 
         </td>
         <td class= "text-right">
-            <button class="btn btn-primary mb-1">
-            <i class = "fa fa-pencil"></i>
+
         </td>
         `;
     
@@ -60,6 +77,15 @@ export default class View {
         checkbox.checked = todo.completed;
         checkbox.onclick = () => this.toggleCompleted(todo.id);
         row.children[2].appendChild(checkbox);
+
+        //Creamos el botón editar
+        const editBtn = document.createElement('button');
+        editBtn.classList.add('btn', 'btn-primary', 'mb-1');
+        editBtn.innerHTML = '<i class = "fa fa-pencil"></i>';
+        editBtn.setAttribute('data-toggle', 'modal');
+        editBtn.setAttribute('data-target', '#modal');
+        editBtn.onclick = ()=> this.modal.setValues(todo);
+        row.children[3].appendChild(editBtn);
 
         //Creamos el botón eliminar
         const removeBtn = document.createElement('button');

@@ -39,7 +39,7 @@ export default class Model {
         const index = this.findTodo(id);
         const todo = this.todos[index];
         todo.completed = !todo.completed;
-        console.log(this.todos)
+        this.save();
     }
 
     addTodo(title, description){
@@ -56,8 +56,18 @@ export default class Model {
         return {...todo}; //Con esta sintaxis indicamos que nos cree un objeto copia del objeto todo
     }
 
+    editTodo(id,values){
+        const index = this.findTodo(id);
+        const todo = this.todos[index];
+        todo.title = values.title;
+        todo.description = values.description;
+        todo.completed = values.completed;
+        this.save();
+        return todo;
+    }
+
     removeTodo(id){
-        const index = this.findTodo(id)
+        const index = this.findTodo(id);
         this.todos.splice(index, 1);//Borramos un elemento empezando por todos[index]
         this.save();
     }
