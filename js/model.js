@@ -32,7 +32,7 @@ export default class Model {
     }
 
     getTodos(){
-        return this.todos
+        return this.todos.map((todo)=>({...todo}));
     }
 
     toggleCompleted(id) {
@@ -63,7 +63,7 @@ export default class Model {
         todo.description = values.description;
         todo.completed = values.completed;
         this.save();
-        return todo;
+        return {...todo};
     }
 
     removeTodo(id){
